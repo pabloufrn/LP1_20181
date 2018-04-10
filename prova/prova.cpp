@@ -117,27 +117,27 @@ namespace prova
 		std::qsort(bfirst, (blast-bfirst)/size, size, cmp);// ordena a alista
 		std::sort((int*)first, (int*) last);
 		byte *fo = nullptr, *llo = blast; // primeira ocorrencia e last da ultima ocorrencia
-        while(bfirst < last) // procura a primeira ocorrencia do valor
-        {
-            if(fo)
-            {
-                if(cmp(bfirst, value) != 0)
-                {
-                    llo = bfirst;
-                    break;
-                }
-            }
-            else if(cmp(bfirst, value) == 0)
-            {
-                fo = bfirst;
-            }
-            bfirst+=size;
-        }
-        if(fo){
-            std::cout << (blast-fo)/size;
-            memcpy(fo, llo, blast - llo);
-            return blast - (llo - fo); // last menos quantidade de ocorrencias
-        }
+		while(bfirst < last) // procura a primeira ocorrencia do valor
+		{
+			if(fo)
+			{
+				if(cmp(bfirst, value) != 0)
+				{
+					llo = bfirst;
+					break;
+				}
+			}
+			else if(cmp(bfirst, value) == 0)
+			{
+				fo = bfirst;
+			}
+			bfirst+=size;
+		}
+		if(fo){
+			std::cout << (blast-fo)/size;
+			memcpy(fo, llo, blast - llo);
+			return blast - (llo - fo); // last menos quantidade de ocorrencias
+		}
 		return blast;
 	}
 } // namespace prova
@@ -179,9 +179,8 @@ int compare_ints( const void * a, const void * b )
 int main( )
 {
 	size_t score = 0;
-	size_t total = 120; // Pontos das 2 primeiras questões.
+	size_t total = 115; // Pontos das 2 primeiras questões.
 	std::cout << ">>> Voce inicia a prova com " << score << " pontos (de " << total << ").\n\n";
-/*
 	// ================================================================================
 	// Questao 1 - teste: vetor está particionado
 	// ================================================================================
@@ -502,7 +501,7 @@ int main( )
 			std::cout << "    Sua resposta estah correta!\n";
 		}
 	}
-	std::cout << ">>> Seus pontos: " << score << " (de " << total << ").\n\n";*/
+	std::cout << ">>> Seus pontos: " << score << " (de " << total << ").\n\n";
 	// ================================================================================
 	// Questao 4 - teste: contem
 	// ================================================================================
@@ -563,18 +562,23 @@ int main( )
 	// ================================================================================
 	{
 		std::cout << ">>> Q5-a: testando a funcao remove_repetidos(): elementos repetidos aleatoriamente posicinados\n";
-        using namespace std;
-		int A[] = {4, 6, 2, 8, 7};
-        //int A[] = {5, 3, -3, 6, -7, -4, 3, 2, -1, 15, 2, 5, 1, 9, 10};
-        //	print array
-        cout << "Array A: [ ";
-        copy(A, end(A), ostream_iterator<int>(cout, " "));
-        cout << "]\n";
-        // print result
-        graal::qsort(begin(A), end(A)-begin(A), sizeof(int),  &pred);
-        cout << "Array A sorted: [ ";
-        copy(A, end(A), ostream_iterator<int>(cout, " "));
-        cout << "]\n";
+		using namespace std;
+		int A[] = {4, 6, 6, 2, 6, 7, 5, 6};
+		int R[] = {2, 4, 7, 5};
+		int value = 6;
+		auto result = prova::remove_repetidos( std::begin(A), std::end(A), (const void*) &value, sizeof(int), compare_ints);	
+		std::cout << "Array result: [ ";
+		std::copy(std::begin(A), (int*) result, std::ostream_iterator<int>(std::cout, " "));
+		std::cout << "]\n";
+		if (std::memcmp(A, R, std::distance((prova::byte*) A, (prova::byte*) result)) != 0)
+		{
+			std::cout << "    Sua resposta estah incorreta!\n";
+		}
+		else
+		{
+			score += 5;
+			std::cout << "    Sua resposta estah correta!\n";
+		}
 	}
 	{
 		std::cout << ">>> Q5-b: testando a funcao remove_repetidos(): elementos repetidos no inicio\n";
@@ -617,22 +621,21 @@ int main( )
 		int R[] = {2, 4, 6, 7, 8};
 		int value = 1;
 		auto result = prova::remove_repetidos( std::begin(A), std::end(A), (const void*) &value, sizeof(int), &compare_ints);	
-        std::cout << "Array A: [ ";
-		std::copy(A, std::end(A), std::ostream_iterator<int>(std::cout, " "));
-		std::cout << "]\n";
-	
-        if (std::memcmp(A, R, std::distance((prova::byte*) A, (prova::byte*) result)) != 0)
-        {
-		   std::cout << "    Sua resposta estah incorreta!\n";
-        }
-        else
-        {
-		   score += 5;
-		   std::cout << "    Sua resposta estah correta!\n";
-        }
+
+		if (std::memcmp(A, R, std::distance((prova::byte*) A, (prova::byte*) result)) != 0)
+		{
+			std::cout << "    Sua resposta estah incorreta!\n";
+		}
+		else
+		{
+			score += 5;
+			std::cout << "    Sua resposta estah correta!\n";
+		}
 	}
 	std::cout << ">>> Seus pontos: " << score << " (de " << total << ").\n\n";
 	std::cout << "\n\n>>> Normal exiting...\n";
 	return EXIT_SUCCESS;
 
 }
+// TODO: fazer a 5 usando limite inferior e limite superior
+// TODO: fazer o limite superior usando limite inferior

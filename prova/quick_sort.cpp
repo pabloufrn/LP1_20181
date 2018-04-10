@@ -9,7 +9,7 @@
 void * graal::partition(void * first, void * last, size_t size, Predicate p)
 {
 	byte * bslow = reinterpret_cast<byte*>(first), * bfast = bslow, * bpivot = reinterpret_cast<byte*>(last) - size;
-	byte * tmp = new byte(size);
+	byte * tmp = new byte[size];
 	while(bfast < bpivot)
 	{
 		if(p(bfast, bpivot) == -1)
@@ -24,7 +24,7 @@ void * graal::partition(void * first, void * last, size_t size, Predicate p)
 	std::memcpy(tmp, bslow, size);
 	std::memcpy(bslow, bpivot, size);
 	std::memcpy(bpivot, tmp, size);
-    delete tmp;
+    	delete [] tmp;
 	return bslow;
 }
 
