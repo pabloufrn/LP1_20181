@@ -38,33 +38,63 @@ namespace prova
 		}	
 		return true;
 	}
-
+	const void* sli(const void *first, const void *last, size_t size, const void *value, Compare *cmp) // search limite inferior
+    {
+        auto bfirst= reinterpret_cast<byte*>(const_cast<void*>(first));
+        auto blast = reinterpret_cast<byte*>(const_cast<void*>(last));
+        auto middle = bfirst  + size*((std::distance(bfirst, blast)/size)/2);
+        auto *aux = blast;
+        while(bfirst < aux){
+            if(cmp(middle, value) != -1){ // search left side
+                aux = middle;
+                middle = bfirst + size*((std::distance(bfirst, aux)/size)/2);
+                continue; 
+            }
+            else { // search right side
+                bfirst = middle+size;
+                middle = bfirst + size*((std::distance(bfirst, aux)/size)/2);
+                continue;
+            }	
+        }
+        return middle; 
+    }
 	// Questão 2-a
 	const void * limite_inferior( const void *first, const void *last,
 			size_t size, const void * value, Compare *cmp )
 	{
-		auto fast = reinterpret_cast<byte*>(const_cast<void*>(first));
-		while(fast < last)
-		{
-			if(cmp(fast, value) != -1)
-				return fast;
-			fast+=size;
-		}
-		return last; 
+        auto blast = reinterpret_cast<byte*>(const_cast<void*>(last));
+        if(cmp(blast-size, (void*) value) == -1)return last;
+        const void *r = sli(first, last, size, value, cmp);
+        return r;
 	}
-
+	const void* sls(const void *first, const void *last, size_t size, const void *value, Compare *cmp) // search limite superior
+    {
+        auto bfirst= reinterpret_cast<byte*>(const_cast<void*>(first));
+        auto blast = reinterpret_cast<byte*>(const_cast<void*>(last));
+        auto middle = bfirst  + size*((std::distance(bfirst, blast)/size)/2);
+        auto *aux = blast;
+        while(bfirst < aux){
+            if(cmp(middle, value) == 1){ // search left side
+                aux = middle;
+                middle = bfirst + size*((std::distance(bfirst, aux)/size)/2);
+                continue; 
+            }
+            else { // search right side
+                bfirst = middle+size;
+                middle = bfirst + size*((std::distance(bfirst, aux)/size)/2);
+                continue;
+            }	
+        }
+        return middle; 
+    }
 	// Questão 2-b
 	const void * limite_superior( const void *first, const void *last,
 			size_t size, const void * value, Compare *cmp )
 	{
-		auto fast = reinterpret_cast<byte*>(const_cast<void*>(first));
-		while(fast < last)
-		{
-			if(cmp(fast, value) == 1)
-				return fast;
-			fast+=size;
-		}
-		return last; 
+		auto blast = reinterpret_cast<byte*>(const_cast<void*>(last));
+        if(cmp(blast-size, (void*) value) != 1)return last;
+        const void *r = sls(first, last, size, value, cmp);
+        return r;
 	}
 
 	// Questão 3
@@ -238,7 +268,7 @@ int main( )
 		// buscando o limite inferior
 		auto li = (int *) prova::limite_inferior( std::begin(A), std::end(A), sizeof(int),
 				&target, compare_ints );
-
+        std::cout << *li << " " << std::distance(std::begin(A), li) << "\n";
 		if ( *li == 4 and std::distance(std::begin(A), li) == 7 )
 		{
 			score += 5;

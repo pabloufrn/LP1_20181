@@ -10,7 +10,7 @@ void* graal::clone(void* first , void* last)
 	byte* bfirst = reinterpret_cast<byte*>(first);
 	byte* blast = reinterpret_cast<byte*>(last);
 	// we need to ensure we have sufficient memory to store resultant range.
-	byte* copy = new byte(blast-bfirst);
+	byte* copy = new byte[blast-bfirst];
 	memcpy(copy, bfirst, blast-bfirst);
 	return copy;
 }

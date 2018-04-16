@@ -13,7 +13,7 @@ int main(void)
 	cout << "]\n";
 
 	// Apply Reverse
-	graal::reverse(begin(A), end(A), sizeof(int));
+	graal::reverse(begin(A), end(A), sizeof(A[0]));
 	// -------------
 	cout << "----- After Reverse ------\n";
 	cout << "Array A: [";

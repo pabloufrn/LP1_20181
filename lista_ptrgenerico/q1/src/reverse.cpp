@@ -11,9 +11,9 @@ void graal::reverse(void* first , void* last, size_t size)
 	byte* bfirst = reinterpret_cast<byte*>(first);
 	byte* blast = reinterpret_cast<byte*>(last) - size;
 	/// get the middle-left element.
-	byte* bmiddle = bfirst + (std::distance(bfirst, blast)/2) - 1;
+	byte* bmiddle = bfirst + (std::distance(bfirst, blast)/2) - size;
 	// we need to ensure we have sufficient memory to operate (size bytes).
-	byte* aux = new byte(size);
+	byte aux[size]; 
 	while(bfirst < bmiddle)
 	{
 		// generic swap
@@ -24,6 +24,4 @@ void graal::reverse(void* first , void* last, size_t size)
 		bfirst += size;
 		blast -= size;
 	}
-	// deallocate aux pointer
-	delete aux;
 }
